@@ -36,3 +36,4 @@ Lab1.workspace
 Makefile
 *.mk
 guessing-game/guessing-game.txt
+*.txt
