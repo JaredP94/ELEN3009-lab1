@@ -1,7 +1,7 @@
 #include "screen.h"
 
 // 0 represents the top-left screen element
-const string::size_type TOP_LEFT = 0;
+const string::size_type TOP_LEFT = 0; // const - Case 1: integer datatype large enough to represent any possible string size which cannot be changed due to const declaration
 
 // Screen's constructor
 Screen::Screen(string::size_type height, string::size_type width, char bkground):
@@ -86,7 +86,7 @@ void Screen::set( char ch )
 	return;
 }
 
-void Screen::set( const string& s )
+void Screen::set( const string& s ) // const - Case 2: string variable which is passed by reference and is to be kept constant within function scope
 {   // write string beginning at current _cursor position
 	auto space = remainingSpace();
 	auto len = s.size();
@@ -136,7 +136,7 @@ void Screen::reSize( string::size_type h, string::size_type w, char bkground )
 		string::size_type offset = w * ix; // row position
 		for ( string::size_type iy = 0; iy < _width; ++iy )
 			// for each column, assign the old value
-			_screen.at(offset + iy) = local[ local_pos++ ];
+			_screen.at(offset + iy) = local[ local_pos++ ]; // .at() method: Returns a reference to the character at specified position on the screen
 	}
 
 	_height = h;
@@ -146,7 +146,7 @@ void Screen::reSize( string::size_type h, string::size_type w, char bkground )
 	return;
 }
 
-void Screen::display() const
+void Screen::display() const // const - Case 3: const used to create a read-only function which cannot modify the object for which it is called
 {
 	for ( string::size_type ix = 0; ix < _height; ++ix )
 	{ // for each row
