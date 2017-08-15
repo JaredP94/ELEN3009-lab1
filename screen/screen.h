@@ -59,6 +59,8 @@ public:
 	void display() const;
 	// check whether the specified co-ordinates lie within the screen
 	bool checkRange(string::size_type row, string::size_type col) const;
+	// draw empty square with border outline
+	void square(int x_pos, int y_pos, int length);
 
 private:
 	// private member functions
@@ -81,3 +83,6 @@ private:
 
 #endif
 
+//Exercise 4.5:
+//The square member forms part of the Screen class, which requires access to the private members in order to perform correct implementation - i.e error checking is impossible without access to the private variables width and height and thus the square would most likely not even appear as a square.
+//This function should not form part of the Screen class responsibility as the class is meant to act as a rendering class (presentation layer)

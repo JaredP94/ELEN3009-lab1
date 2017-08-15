@@ -187,6 +187,50 @@ bool Screen::checkRange( string::size_type row, string::size_type col ) const
 	return true;
 }
 
+void Screen::square(int x_pos, int y_pos, int length) // assumes user will enter positive values
+{
+	// error checking:
+	// positioning check
+	if (checkRange(x_pos, y_pos) == false) return;
+	// horizontal length check
+	if ( (unsigned)x_pos + length > _width )
+	{
+		cout << "Horizontal dimension is too large \n";
+		return;
+	}
+	// vertical length check
+	if ( (unsigned)y_pos + length > _height)
+	{
+		cout << "Vertical dimension is too large \n";
+		return;
+	}
+	// square creation
+	move(x_pos,y_pos + 1);
+	int x_adjust = 2;
+	int j_adjust = 1;
+	for (int i = 0; i < length - x_adjust; i++)
+	{
+		set('*');
+		forward();
+	}
+	for (int j = 0; j < length - j_adjust; j++)
+	{
+		set('*');
+		down();
+	}
+	for (int k = length; k > 1; k--)
+	{
+		set('*');
+		back();
+	}
+	for (int m = length; m > 0; m--)
+	{
+		set('*');
+		up();
+	}
+	return;
+ }
+
 string::size_type Screen::remainingSpace() const
 {   // includes current position
 	auto size = _width * _height;
