@@ -69,6 +69,24 @@ void Screen::move( string::size_type row, string::size_type col )
 	return;
 }
 
+void Screen::move(Direction dir)
+{
+	Direction _home = Direction::HOME;
+	Direction _forward = Direction::FORWARD;
+	Direction _back = Direction::BACK;
+	Direction _up = Direction::UP;
+	Direction _down = Direction::DOWN;
+	Direction _end = Direction::END;
+	
+	if (dir == _home) home();
+	else if (dir == _forward) forward();
+	else if (dir == _back) back();
+	else if (dir == _up) up();
+	else if (dir == _down) down();
+	else if (dir == _end) end();
+	else return;
+}
+
 char Screen::get( string::size_type row, string::size_type col )
 {
 	// position _cursor
