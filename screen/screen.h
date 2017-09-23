@@ -5,6 +5,8 @@
 #include <iostream>
 using namespace std;
 
+enum class Direction{HOME, FORWARD, BACK, UP, DOWN, END};
+
 // The unsigned integral type which is used to store the number of
 // characters in a string is nested within the string class, so it
 // is accessed using "string::size_type".
@@ -36,6 +38,8 @@ public:
 	void down();
 	// move the cursor to the specified row and column
 	void move(string::size_type row, string::size_type col);
+	// move the cursor in a specified direction
+	void move(Direction dir); // not a necessity for clients of Screen to still correctly operate since it overloads the original move() function - does offer more intuitive control to the user
 
 	// get the character at the cursor's current position
 	char get() const { return _screen[_cursor]; }
@@ -55,6 +59,8 @@ public:
 	void display() const;
 	// check whether the specified co-ordinates lie within the screen
 	bool checkRange(string::size_type row, string::size_type col) const;
+	// draw empty square with border outline
+	void square(int x_pos, int y_pos, int length);
 
 private:
 	// private member functions
@@ -77,3 +83,10 @@ private:
 
 #endif
 
+//Exercise 4.5:
+//The square member forms part of the Screen class, which requires access to the private members in order to perform correct implementation - i.e error checking is impossible without access to the private variables width and height and thus the square would most likely not even appear as a square.
+//This function should not form part of the Screen class responsibility as the class is meant to act as a rendering class (presentation layer)
+
+//Exercise 4.6:
+//A more intuitive solution may be the implementation of a 2D array - it's much simpler to understand the code structure in this way and allows for new editors to easily modify code thanks to it's general applicability across programming languages. Position system then becomes more intuitive.
+//A classes interface should not be changed as an existing codebase may no longer function as it did before. The interface and base functionality should remain to ensure compatibility, whilst changing the implementation may allow for enhanced functionality, better performance, or a simpler framework to understand.

@@ -7,26 +7,38 @@ using namespace std;
 int main()
 {
 	Screen myScreen{6,6};
-
-	myScreen.forward();
+	myScreen.clear(' ');
+	myScreen.move(1,1);
+	myScreen.set("******");
+	myScreen.move(1,4);
 	myScreen.set('*');
 	myScreen.down();
 	myScreen.set('*');
-	myScreen.move(3,3);
-	myScreen.set("---");
-
-	myScreen.display();
+	myScreen.down();
+	myScreen.set('*');
+	myScreen.down();
+	myScreen.set('*');
+	myScreen.down();
+	myScreen.set('*');
+	myScreen.move(6,2);
+	myScreen.set("***");
+	myScreen.display(); // Prints a 'J' on the screen
+	
 	cout << endl;
-
-	myScreen.reSize(16,16);
-	myScreen.display();
+	myScreen.reSize(8,8);
 	myScreen.clear(' ');
-
-	myScreen.move(7,7);
-	myScreen.set("BIG");
-	myScreen.move(8,5);
-	myScreen.set("SCREEN");
-	myScreen.display();
+	myScreen.square(3,3,5);
+	myScreen.display(); // Displays an empty square
+	
+	cout << endl;
+	myScreen.clear(' ');
+	myScreen.square(9,2,5);
+	myScreen.display(); // Test for start position error
+	
+	cout << endl;
+	myScreen.clear(' ');
+	myScreen.square(4,2,5);
+	myScreen.display(); // Test for length error
 
 	return 0;
 }

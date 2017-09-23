@@ -1,7 +1,7 @@
 #include "screen.h"
 
 // 0 represents the top-left screen element
-const string::size_type TOP_LEFT = 0;
+const string::size_type TOP_LEFT = 0; // const - Case 1: integer datatype large enough to represent any possible string size which cannot be changed due to const declaration
 
 // Screen's constructor
 Screen::Screen(string::size_type height, string::size_type width, char bkground):
@@ -36,20 +36,20 @@ void Screen::back()
 
 void Screen::up()
 {   // move _cursor up one row of screen
-	// do not wrap around
-	if ( row() == 1 ) // at top?
-		cerr << "Screen::up - Cannot wrap around in a vertical direction" << endl;
-	else
-		_cursor -= _width;
+	// wrap around if the _cursor is at the start of the screen
+	// check for top of screen; wrap around
+	if ( _cursor == TOP_LEFT ) end();
+	else if ( row() == 1) _cursor = _screen.size() - ( _width - _cursor % _width ) - 1;
+	else _cursor -= _width;
 
 	return;
 }
 
 void Screen::down()
 {   // move _cursor down one row of screen
-	// do not wrap around
-	if ( row() == _height ) // at bottom?
-		cerr << "Screen::down - Cannot wrap around in a vertical direction" << endl;
+	// wrap around if the _cursor is at the end of the screen
+	if ( _cursor == _screen.size() - 1 ) home();
+	else if ( row() == _height) _cursor = ( _cursor % _width ) + 1;
 	else
 		_cursor += _width;
 
@@ -69,6 +69,24 @@ void Screen::move( string::size_type row, string::size_type col )
 	return;
 }
 
+void Screen::move(Direction dir)
+{
+	Direction _home = Direction::HOME;
+	Direction _forward = Direction::FORWARD;
+	Direction _back = Direction::BACK;
+	Direction _up = Direction::UP;
+	Direction _down = Direction::DOWN;
+	Direction _end = Direction::END;
+	
+	if (dir == _home) home();
+	else if (dir == _forward) forward();
+	else if (dir == _back) back();
+	else if (dir == _up) up();
+	else if (dir == _down) down();
+	else if (dir == _end) end();
+	else return;
+}
+
 char Screen::get( string::size_type row, string::size_type col )
 {
 	// position _cursor
@@ -86,7 +104,7 @@ void Screen::set( char ch )
 	return;
 }
 
-void Screen::set( const string& s )
+void Screen::set( const string& s ) // const - Case 2: string variable which is passed by reference and is to be kept constant within function scope
 {   // write string beginning at current _cursor position
 	auto space = remainingSpace();
 	auto len = s.size();
@@ -136,7 +154,7 @@ void Screen::reSize( string::size_type h, string::size_type w, char bkground )
 		string::size_type offset = w * ix; // row position
 		for ( string::size_type iy = 0; iy < _width; ++iy )
 			// for each column, assign the old value
-			_screen.at(offset + iy) = local[ local_pos++ ];
+			_screen.at(offset + iy) = local[ local_pos++ ]; // .at() method: Returns a reference to the character at specified position on the screen
 	}
 
 	_height = h;
@@ -146,7 +164,7 @@ void Screen::reSize( string::size_type h, string::size_type w, char bkground )
 	return;
 }
 
-void Screen::display() const
+void Screen::display() const // const - Case 3: const used to create a read-only function which cannot modify the object for which it is called
 {
 	for ( string::size_type ix = 0; ix < _height; ++ix )
 	{ // for each row
@@ -168,6 +186,50 @@ bool Screen::checkRange( string::size_type row, string::size_type col ) const
 	}
 	return true;
 }
+
+void Screen::square(int x_pos, int y_pos, int length) // assumes user will enter positive values
+{
+	// error checking:
+	// positioning check
+	if (checkRange(x_pos, y_pos) == false) return;
+	// horizontal length check
+	if ( (unsigned)x_pos + length > _width )
+	{
+		cout << "Horizontal dimension is too large \n";
+		return;
+	}
+	// vertical length check
+	if ( (unsigned)y_pos + length > _height)
+	{
+		cout << "Vertical dimension is too large \n";
+		return;
+	}
+	// square creation
+	move(x_pos,y_pos + 1);
+	int x_adjust = 2;
+	int j_adjust = 1;
+	for (int i = 0; i < length - x_adjust; i++)
+	{
+		set('*');
+		forward();
+	}
+	for (int j = 0; j < length - j_adjust; j++)
+	{
+		set('*');
+		down();
+	}
+	for (int k = length; k > 1; k--)
+	{
+		set('*');
+		back();
+	}
+	for (int m = length; m > 0; m--)
+	{
+		set('*');
+		up();
+	}
+	return;
+ }
 
 string::size_type Screen::remainingSpace() const
 {   // includes current position
