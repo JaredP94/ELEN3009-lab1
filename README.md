@@ -1,4 +1,4 @@
-# ELEN3009-lab1 - Software Development II
+# ELEN3009-Lab1 - Software Development II
 Lab providing exposure to Object Oriented Programming (OOP).
 ## Involves creating the following:
 
